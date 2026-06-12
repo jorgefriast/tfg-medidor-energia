@@ -1,0 +1,13 @@
+target/
+*.class
+codecarbon.csv
+codecarbon_final.csv
+temps_monitor.json
+stats.json
+intel_logs/
+monitor_logs/
+intel_power_gadget_log.csv
+.settings/
+.project
+.classpath
+user-problem.json
