@@ -42,7 +42,7 @@ public class FiltradorCSV {
         List<MuestraTemperatura> muestras = leerMuestrasDesdeJson("temps_monitor.json");
 
         if (muestras.isEmpty()) {
-            // Fallback: si no hay JSON intentamos el CSV de Power Gadget como antes
+            //si no hay JSON intentamos el CSV de Power Gadget como antes
             System.out.println("[FiltradorCSV] AVISO: no se encontro temps_monitor.json, intentando CSV de Power Gadget...");
             muestras = leerMuestrasDesdeCSV(powerGadgetPath);
         }
@@ -151,10 +151,7 @@ public class FiltradorCSV {
         }
     }
 
-    // -----------------------------------------------------------------------
-    // Lee muestras desde el JSON generado por el monitor Python.
-    // Formato esperado: [{"tiempo": 0.25, "temp": 53.0, "potencia": 16.7}, ...]
-    // -----------------------------------------------------------------------
+    
     private List<MuestraTemperatura> leerMuestrasDesdeJson(String jsonPath) {
         List<MuestraTemperatura> muestras = new ArrayList<>();
 
@@ -162,8 +159,6 @@ public class FiltradorCSV {
         if (!f.exists()) return muestras;
 
         try (FileReader reader = new FileReader(f)) {
-            // Usamos json-simple (misma librería que EjecutorAE) para parsear
-            // el array JSON de forma segura, sin manipulación manual de strings.
             JsonArray array = (JsonArray) Jsoner.deserialize(reader);
 
             for (Object elemento : array) {
@@ -187,9 +182,7 @@ public class FiltradorCSV {
         return muestras;
     }
 
-    // -----------------------------------------------------------------------
-    // Fallback: lee muestras desde el CSV de Intel Power Gadget (comportamiento original)
-    // -----------------------------------------------------------------------
+    
     private List<MuestraTemperatura> leerMuestrasDesdeCSV(String powerGadgetPath) {
         List<MuestraTemperatura> muestras = new ArrayList<>();
 
@@ -231,9 +224,7 @@ public class FiltradorCSV {
         return muestras;
     }
 
-    // -----------------------------------------------------------------------
-    // Clases y métodos de cálculo (sin cambios)
-    // -----------------------------------------------------------------------
+    
     private static class MuestraTemperatura {
         double tiempo;
         double temperatura;
@@ -281,10 +272,6 @@ public class FiltradorCSV {
         return temperaturaCercana;
     }
 
-    // -----------------------------------------------------------------------
-    // Version sin Power Gadget (Linux): usa temps_monitor.json si existe,
-    // y si no, escribe -1 en temperatura y potencia.
-    // -----------------------------------------------------------------------
     public void filtrarSinTemperatura(String codecarbonPath,
                                       String salidaPath,
                                       int numRuns,

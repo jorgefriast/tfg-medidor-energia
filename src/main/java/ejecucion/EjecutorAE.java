@@ -24,14 +24,7 @@ import es.uma.lcc.caesium.ea.problem.discrete.binary.trap.MMDP;
 import es.uma.lcc.caesium.ea.statistics.EntropyDiversity;
 import es.uma.lcc.caesium.ea.test.MyVariationFactory;
 
-/**
- * Módulo de ejecución del algoritmo evolutivo.
- *
- * Cuando se lanza desde medir_codecarbon.py, la parada por temperatura
- * la gestiona el monitor Python (que termina este proceso externamente).
- * El parámetro tempMaxima solo se usa si este módulo se ejecuta de forma
- * standalone (sin pasar por el script Python), como fallback en Linux.
- */
+
 public class EjecutorAE {
 
     public void ejecutarAlgoritmo(int numRuns, long seed, String problema, double tempMaxima)
@@ -53,19 +46,14 @@ public class EjecutorAE {
 
         System.out.println("seed:     " + conf.getSeed());
         System.out.println("islands:  " + conf.getNumIslands());
-
-        // --- Modo standalone: comprobar si podemos leer temperatura localmente ---
-        // Esto solo tiene efecto si se ejecuta sin el script Python (p.ej. en Linux).
-        // Cuando Python controla el proceso, el monitor externo se encarga de parar.
+        
         boolean modoStandalone = !estaControladoPorPython();
         if (modoStandalone) {
             System.out.println("[Temp] Modo standalone: parada por temperatura activada en Java.");
             System.out.println("[Temp] Temperatura maxima: " + tempMaxima + " C");
         }
 
-        // --- Preparar algoritmo ---
         EvolutionaryAlgorithm myEA = new EvolutionaryAlgorithm(conf);
-        // Instanciar el problema seleccionado por el usuario
         ObjectiveFunction funcion;
         if ("UserProblem".equals(problema)) {
             funcion = cargarProblemaUsuario();
@@ -128,23 +116,12 @@ public class EjecutorAE {
         }
     }
 
-    /**
-     * Detecta si este proceso está siendo lanzado desde el script Python
-     * comprobando si la variable de entorno CODECARBON_PYTHON está definida
-     * o si hay un proceso padre que sea Python.
-     *
-     * Forma simple y fiable: el script Python define la variable de entorno
-     * LAUNCHED_BY_PYTHON=1 al lanzar el proceso Java.
-     */
+
     private boolean estaControladoPorPython() {
         return "1".equals(System.getenv("LAUNCHED_BY_PYTHON"));
     }
 
-    /**
-     * Fallback de lectura de temperatura para modo standalone en Linux.
-     * Lee de /sys/class/thermal/thermal_zone0/temp (milésimas de °C).
-     * Devuelve 0.0 si no se puede leer.
-     */
+
     private double leerTemperaturaLinux() {
         try {
             java.io.File f = new java.io.File("/sys/class/thermal/thermal_zone0/temp");
@@ -161,9 +138,6 @@ public class EjecutorAE {
         return 0.0;
     }
 
-    // -----------------------------------------------------------------------
-    // Main: punto de entrada para ejecución standalone (sin script Python)
-    // -----------------------------------------------------------------------
     public static void main(String[] args) {
         int    numRuns   = 1;
         long   seed      = 1;
@@ -198,14 +172,7 @@ public class EjecutorAE {
         }
     }
 
-    /**
-     * Carga un problema definido por el usuario desde user-problem.json.
-     * El fichero debe tener el formato:
-     *   { "clase": "paquete.NombreClase", "parametros": [param1, param2, ...] }
-     *
-     * Los parametros se pasan como tipos primitivos (int, double) o String.
-     * Si el fichero no existe o hay un error, lanza RuntimeException.
-     */
+
     @SuppressWarnings("unchecked")
     private ObjectiveFunction cargarProblemaUsuario() {
         String rutaFichero = System.getProperty("user.problem.file", "user-problem.json");

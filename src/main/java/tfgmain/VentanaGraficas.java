@@ -21,9 +21,6 @@ public class VentanaGraficas extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    // -----------------------------------------------------------------------
-    // Paleta de colores — Sincronizada con VentanaPrincipal
-    // -----------------------------------------------------------------------
     private static final Color OLIVE        = new Color(0x8C, 0xB3, 0x69);
     private static final Color GOLD         = new Color(0xF4, 0xE2, 0x85);
     private static final Color SANDY        = new Color(0xF4, 0xA2, 0x59);
@@ -34,7 +31,7 @@ public class VentanaGraficas extends JFrame {
     private static final Color BG_MAIN      = new Color(0xFA, 0xF7, 0xF0);
     private static final Color BG_CHART     = new Color(0xFF, 0xFF, 0xFF);
     private static final Color GRID_CLR     = new Color(0xD8, 0xD2, 0xC2);
-    private static final Color BG_TAB_IDLE  = new Color(0xE8, 0xE3, 0xD5); // Pestañas inactivas
+    private static final Color BG_TAB_IDLE  = new Color(0xE8, 0xE3, 0xD5); 
 
     private static final Color TEXT_DARK    = new Color(0x2C, 0x2C, 0x24);
     private static final Color TEXT_MID     = new Color(0x6A, 0x64, 0x52);
@@ -45,7 +42,6 @@ public class VentanaGraficas extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Fondo general
         getContentPane().setBackground(BG_MAIN);
 
         JTabbedPane tabs = new JTabbedPane();
@@ -53,7 +49,6 @@ public class VentanaGraficas extends JFrame {
         tabs.setBackground(BG_MAIN);
         tabs.setBorder(new EmptyBorder(8, 8, 8, 8));
         
-        // Aplicar la UI personalizada para hacerlas redondeadas
         tabs.setUI(new RoundedTabbedPaneUI());
 
         List<Map<String, String>> filas = leerCodeCarbon("codecarbon_final.csv");
@@ -91,9 +86,6 @@ public class VentanaGraficas extends JFrame {
         add(tabs);
     }
 
-    // -----------------------------------------------------------------------
-    // Aplicar tema a un chart de barras
-    // -----------------------------------------------------------------------
     private void temaGrafico(JFreeChart chart) {
         chart.setBackgroundPaint(BG_CHART);
         chart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -119,7 +111,6 @@ public class VentanaGraficas extends JFrame {
         CategoryAxis domainAxis = (CategoryAxis) plot.getDomainAxis();
 
         if (etiquetasLargas) {
-            // Con muchas barras: fuente pequeña y etiquetas rotadas 45 grados
             domainAxis.setTickLabelFont(new Font("Segoe UI", Font.PLAIN, 8));
             domainAxis.setCategoryLabelPositions(
                 org.jfree.chart.axis.CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 4.0)
@@ -157,12 +148,11 @@ public class VentanaGraficas extends JFrame {
     private JPanel wrapChart(JFreeChart chart) {
         ChartPanel cp = new ChartPanel(chart);
         cp.setBackground(BG_CHART);
-        cp.setDoubleBuffered(false); // Evita que el buffer oculte subtitulos al volver a la pestaña
+        cp.setDoubleBuffered(false); 
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(BG_CHART);
         p.add(cp, BorderLayout.CENTER);
         
-        // Un marco muy sutil para que respire dentro del tab
         p.setBorder(BorderFactory.createCompoundBorder(
             new EmptyBorder(10, 10, 10, 10),
             BorderFactory.createLineBorder(GRID_CLR, 1)
@@ -170,9 +160,7 @@ public class VentanaGraficas extends JFrame {
         return p;
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña 1: Emisiones CO2 — TEAL
-    // -----------------------------------------------------------------------
+    // Pestaña 1: Emisiones CO2 
     private JPanel crearPanelEmisiones(List<Map<String, String>> filas) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         int i = 1;
@@ -200,9 +188,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña 2: Energía CPU vs RAM — OLIVE / SANDY
-    // -----------------------------------------------------------------------
+    // Pestaña 2: Energía 
     private JPanel crearPanelEnergia(List<Map<String, String>> filas) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         int i = 1;
@@ -233,9 +219,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña 3: Temperatura media — BRICK
-    // -----------------------------------------------------------------------
+    // Pestaña 3: Temperatura media
     private JPanel crearPanelTemperatura(List<Map<String, String>> filas) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         int i = 1;
@@ -269,9 +253,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña 4: Potencia Intel (línea temporal)
-    // -----------------------------------------------------------------------
+    // Pestaña 4: Potencia Intel 
     private JPanel crearPanelIntel(String carpeta) {
         File dir = new File("monitor_logs");
         if (!dir.exists() || dir.listFiles() == null) return null;
@@ -341,9 +323,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña 5: Energía media por problema — OLIVE
-    // -----------------------------------------------------------------------
+    // Pestaña 5: Energía media por problema 
     private JPanel crearPanelEnergiaPorProblema(List<Map<String, String>> filas) {
         Map<String, List<Double>> porProblema = new LinkedHashMap<>();
         for (Map<String, String> fila : filas) {
@@ -376,9 +356,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña 6: Energía por ejecución (barras) — SANDY
-    // -----------------------------------------------------------------------
+    // Pestaña 6: Energía por ejecución (barras)
     private JPanel crearPanelEnergiaAcumulada(List<Map<String, String>> filas) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         int i = 1;
@@ -412,9 +390,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña 7: Tasa de emisiones — BRICK
-    // -----------------------------------------------------------------------
+    // Pestaña 7: Tasa de emisiones
     private JPanel crearPanelTasaEmisiones(List<Map<String, String>> filas) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         int i = 1;
@@ -442,9 +418,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
     // Pestaña 8: Desglose CPU/RAM/GPU por problema
-    // -----------------------------------------------------------------------
     private JPanel crearPanelDesglosePorProblema(List<Map<String, String>> filas) {
         Map<String, List<double[]>> porProblema = new LinkedHashMap<>();
         for (Map<String, String> fila : filas) {
@@ -485,9 +459,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña 9: Potencia media por problema — TEAL
-    // -----------------------------------------------------------------------
+    // Pestaña 9: Potencia media por problema 
     private JPanel crearPanelPotenciaPorProblema(List<Map<String, String>> filas) {
         Map<String, List<Double>> porProblema = new LinkedHashMap<>();
         for (Map<String, String> fila : filas) {
@@ -520,9 +492,7 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Pestaña nueva: Energia media vs tiempo de descanso — GOLD
-    // -----------------------------------------------------------------------
+    // Pestaña 10: Energia media vs tiempo de descanso 
     private JPanel crearPanelEnergiaVsDescanso(List<Map<String, String>> filas) {
         // Agrupar energía media por tiempo de descanso
         Map<Integer, List<Double>> porDescanso = new TreeMap<>();
@@ -563,9 +533,6 @@ public class VentanaGraficas extends JFrame {
         return wrapChart(chart);
     }
 
-    // -----------------------------------------------------------------------
-    // Utilidades
-    // -----------------------------------------------------------------------
     private List<Map<String, String>> leerCodeCarbon(String rutaCSV) {
         List<Map<String, String>> filas = new ArrayList<>();
         File f = new File(rutaCSV);
@@ -600,16 +567,12 @@ public class VentanaGraficas extends JFrame {
         }
     }
 
-    // -----------------------------------------------------------------------
-    // Clase UI Personalizada para pestañas redondeadas tipo "Pill"
-    // -----------------------------------------------------------------------
     private class RoundedTabbedPaneUI extends BasicTabbedPaneUI {
         private static final int CORNER_RADIUS = 16;
 
         @Override
         protected void installDefaults() {
             super.installDefaults();
-            // Espaciado interno de las pestañas
             tabAreaInsets.left = 12;
             tabAreaInsets.top = 10;
             tabAreaInsets.bottom = 10;
@@ -627,19 +590,16 @@ public class VentanaGraficas extends JFrame {
                 g2.setColor(BG_TAB_IDLE); 
             }
             
-            // Dibujamos el rectángulo redondeado
             g2.fillRoundRect(x, y + 2, w - 4, h - 4, CORNER_RADIUS, CORNER_RADIUS);
             g2.dispose();
         }
 
         @Override
         protected void paintTabBorder(Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h, boolean isSelected) {
-            // Anulamos el borde cuadrado por defecto
         }
 
         @Override
         protected void paintFocusIndicator(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex, Rectangle iconRect, Rectangle textRect, boolean isSelected) {
-            // Anulamos el recuadro punteado feo al hacer clic
         }
 
         @Override
@@ -654,7 +614,6 @@ public class VentanaGraficas extends JFrame {
                 g2.setColor(TEXT_DARK);
             }
 
-            // Calculamos la posición para centrar el texto exactamente en la píldora
             FontMetrics fm = g2.getFontMetrics();
             int tx = textRect.x + (textRect.width - fm.stringWidth(title)) / 2;
             int ty = textRect.y + fm.getAscent() + (textRect.height - fm.getHeight()) / 2 + 1;
@@ -665,7 +624,6 @@ public class VentanaGraficas extends JFrame {
 
         @Override
         protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex) {
-            // En vez del marco gris feo, pintamos una linea superior fina del color principal
             int width = tabPane.getWidth();
             int height = tabPane.getHeight();
             Insets insets = tabPane.getInsets();

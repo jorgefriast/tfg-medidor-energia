@@ -18,9 +18,7 @@ except ImportError:
 ES_WINDOWS = platform.system() == "Windows"
 ES_LINUX   = platform.system() == "Linux"
 
-# ---------------------------------------------------------------------------
-# Configuracion
-# ---------------------------------------------------------------------------
+
 POWERLOG_PATH = os.getenv('POWERLOG_PATH',
     r"C:\Program Files\Intel\Power Gadget 3.6\PowerLog3.0.exe")
 CSV_POWERLOG      = "intel_power_gadget_log.csv"
@@ -41,9 +39,7 @@ if potencia_max > 0: print(f"[Python] Potencia maxima:    {potencia_max:.0f} W")
 if tiempo_max   > 0: print(f"[Python] Tiempo maximo:      {tiempo_max:.0f} s")
 if energia_max  > 0: print(f"[Python] Energia maxima:     {energia_max:.4f} Wh")
 
-# ---------------------------------------------------------------------------
-# Estado compartido entre hilos
-# ---------------------------------------------------------------------------
+
 java_proceso     = None
 powerlog_proceso = None
 parada_por_temp     = False
@@ -57,9 +53,6 @@ t_inicio_medicion    = None
 energia_acumulada_wh = 0.0
 
 
-# ---------------------------------------------------------------------------
-# Leer temperatura del CSV de Power Gadget
-# ---------------------------------------------------------------------------
 def leer_temperatura_powerlog(csv_path):
     if not os.path.exists(csv_path):
         return None
@@ -99,9 +92,6 @@ def leer_temperatura_powerlog(csv_path):
 
 
 
-# ---------------------------------------------------------------------------
-# Leer temperatura en Linux desde /sys/class/thermal
-# ---------------------------------------------------------------------------
 def leer_temperatura_linux():
     try:
         import glob
@@ -122,9 +112,6 @@ def leer_temperatura_linux():
     return None
 
 
-# ---------------------------------------------------------------------------
-# Leer potencia en Linux con psutil
-# ---------------------------------------------------------------------------
 def leer_potencia_linux():
     if not PSUTIL_DISPONIBLE:
         return None
@@ -139,9 +126,6 @@ def leer_potencia_linux():
         return None
 
 
-# ---------------------------------------------------------------------------
-# Hilo monitor: muestrea cada 0.25s, imprime en pantalla cada 1s
-# ---------------------------------------------------------------------------
 _esperando_impreso = [False]
 
 def _parar_java(motivo):
@@ -274,9 +258,6 @@ def monitor_temperatura():
         n = len(muestras_temperatura)
 
 
-# ---------------------------------------------------------------------------
-# Guardar las muestras en JSON
-# ---------------------------------------------------------------------------
 def guardar_temperaturas_json():
     with lock_muestras:
         copia = list(muestras_temperatura)
@@ -296,9 +277,6 @@ def guardar_temperaturas_json():
         print(f"[Monitor]   Potencia: {len(watts)} muestras  |  Min: {min(watts):.1f}W  Max: {max(watts):.1f}W  Media: {sum(watts)/len(watts):.1f}W")
 
 
-# ---------------------------------------------------------------------------
-# Lanzar Java
-# ---------------------------------------------------------------------------
 def ejecutar_java():
     global java_proceso, t_inicio_medicion
 
@@ -343,9 +321,6 @@ def ejecutar_java():
     return codigo
 
 
-# ---------------------------------------------------------------------------
-# Lanzar Power Gadget
-# ---------------------------------------------------------------------------
 def ejecutar_powerlog():
     global powerlog_proceso
 
@@ -369,9 +344,6 @@ def ejecutar_powerlog():
     )
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 print("=" * 55)
 print("Iniciando medicion...")
 print("=" * 55)

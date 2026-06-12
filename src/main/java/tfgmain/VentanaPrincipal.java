@@ -13,12 +13,7 @@ import medicion.MedidorEnergia;
 public class VentanaPrincipal extends JFrame {
 
     private static final long serialVersionUID = 1L;
-
-    // -----------------------------------------------------------------------
-    // Paleta de colores — Natural / Terrosa
-    //   Muted Olive  #8CB369   Light Gold   #F4E285
-    //   Sandy Brown  #F4A259   Jungle Teal  #5B8E7D   Blushed Brick #BC4B51
-    // -----------------------------------------------------------------------
+    
     private static final Color OLIVE        = new Color(0x8C, 0xB3, 0x69);   // #8CB369
     private static final Color GOLD         = new Color(0xF4, 0xE2, 0x85);   // #F4E285
     private static final Color SANDY        = new Color(0xF4, 0xA2, 0x59);   // #F4A259
@@ -32,16 +27,16 @@ public class VentanaPrincipal extends JFrame {
     private static final Color BRICK_DARK   = new Color(0x96, 0x2E, 0x33);
 
     // Fondos y textos
-    private static final Color BG_MAIN      = new Color(0xFA, 0xF7, 0xF0);   // crema cálida
+    private static final Color BG_MAIN      = new Color(0xFA, 0xF7, 0xF0);   
     private static final Color BG_PANEL     = new Color(0xFF, 0xFF, 0xFF);
-    private static final Color BG_CONSOLE   = new Color(0x1E, 0x2A, 0x24);   // verde muy oscuro
+    private static final Color BG_CONSOLE   = new Color(0x1E, 0x2A, 0x24);   
     private static final Color BG_INPUT     = new Color(0xF0, 0xED, 0xE4);
     private static final Color BORDER_COLOR = new Color(0xD8, 0xD2, 0xC2);
 
     private static final Color TEXT_DARK    = new Color(0x2C, 0x2C, 0x24);
     private static final Color TEXT_MID     = new Color(0x6A, 0x64, 0x52);
     private static final Color TEXT_LIGHT   = new Color(0xA8, 0xA2, 0x90);
-    private static final Color CONSOLE_TEXT = new Color(0xA8, 0xD8, 0xB0);   // verde consola
+    private static final Color CONSOLE_TEXT = new Color(0xA8, 0xD8, 0xB0);   
 
     // Fuentes
     private static final Font FONT_TITLE   = new Font("Segoe UI", Font.BOLD, 18);
@@ -95,14 +90,10 @@ public class VentanaPrincipal extends JFrame {
         setMinimumSize(new Dimension(860, 560));
         setLocationRelativeTo(null);
 
-        // Panel raíz
         panelGeneral = new JPanel(new BorderLayout(0, 0));
         panelGeneral.setBackground(BG_MAIN);
         setContentPane(panelGeneral);
 
-        // ===================================================================
-        // HEADER — barra superior (fondo Jungle Teal)
-        // ===================================================================
         JPanel header = new JPanel(new BorderLayout(16, 0));
         header.setBackground(TEAL);
         header.setBorder(new EmptyBorder(14, 22, 14, 22));
@@ -111,7 +102,6 @@ public class VentanaPrincipal extends JFrame {
         JPanel tituloPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         tituloPanel.setOpaque(false);
 
-        // Barra de acento Sandy Brown
         JPanel accentBar = new JPanel();
         accentBar.setBackground(SANDY);
         accentBar.setPreferredSize(new Dimension(4, 24));
@@ -138,16 +128,12 @@ public class VentanaPrincipal extends JFrame {
         botonesPanel.add(btnReset);
         botonesPanel.add(btnGraficas);
         header.add(botonesPanel, BorderLayout.EAST);
-
-        // ===================================================================
-        // PANEL DE CONFIGURACION
-        // ===================================================================
+        
         JPanel configPanel = new JPanel();
         configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.Y_AXIS));
         configPanel.setBackground(BG_MAIN);
         configPanel.setBorder(new EmptyBorder(10, 14, 6, 14));
 
-        // --- Fila parámetros (acento Olive) ---
         JPanel filaParametros = crearPanelSeccion("PARAMETROS", OLIVE);
 
         JLabel lblNumRuns = crearLabel("Runs:");
@@ -179,7 +165,6 @@ public class VentanaPrincipal extends JFrame {
         panelUserProblem = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         panelUserProblem.setOpaque(false);
 
-        // Campo: nombre del problema (sin paquete)
         JLabel lblNombreProblema = crearLabel("Clase:");
         txtNombreProblema = new JTextField("Mochila", 10);
         txtNombreProblema.setFont(FONT_LABEL);
@@ -191,7 +176,6 @@ public class VentanaPrincipal extends JFrame {
         ));
         txtNombreProblema.setPreferredSize(new java.awt.Dimension(100, 28));
 
-        // Campo: fichero de datos
         JLabel lblFicheroDatos = crearLabel("Datos:");
         txtFicheroDatos = new JTextField("mochila.dat", 12);
         txtFicheroDatos.setFont(FONT_LABEL);
@@ -204,7 +188,7 @@ public class VentanaPrincipal extends JFrame {
         txtFicheroDatos.setPreferredSize(new java.awt.Dimension(110, 28));
 
         // Guardamos referencias para usarlas al lanzar la medición
-        lblUserProblemFile = new JLabel("");  // reutilizamos el campo para guardar clase:fichero
+        lblUserProblemFile = new JLabel(""); 
         lblUserProblemFile.setVisible(false);
 
         // Cada vez que cambia algún campo, regeneramos el user-problem.json automáticamente
@@ -235,7 +219,6 @@ public class VentanaPrincipal extends JFrame {
 
         txtNombreProblema.addActionListener(generarJson);
         txtFicheroDatos.addActionListener(generarJson);
-        // También cuando pierden el foco
         txtNombreProblema.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent e) { generarJson.actionPerformed(null); }
         });
@@ -250,7 +233,6 @@ public class VentanaPrincipal extends JFrame {
         panelUserProblem.add(txtFicheroDatos);
         panelUserProblem.setVisible(false);
 
-        // Mostrar/ocultar panel UserProblem segun seleccion del combo
         comboProblema.addActionListener(ev -> {
             boolean esUserProblem = "UserProblem".equals(comboProblema.getSelectedItem());
             panelUserProblem.setVisible(esUserProblem);
@@ -258,7 +240,6 @@ public class VentanaPrincipal extends JFrame {
             panelGeneral.repaint();
         });
 
-        // --- Fila condiciones de parada (acento Sandy) ---
         JPanel filaParada = crearPanelSeccion("CONDICIONES DE PARADA", SANDY_DARK);
 
         chkTempMaxima   = crearCheckbox("Temp. max. (C)");
@@ -317,16 +298,12 @@ public class VentanaPrincipal extends JFrame {
         configPanel.add(Box.createVerticalStrut(2));
         configPanel.add(panelUserProblem);
 
-        // Wrapper superior: header + config
         JPanel topWrapper = new JPanel(new BorderLayout());
         topWrapper.setBackground(BG_MAIN);
         topWrapper.add(header, BorderLayout.NORTH);
         topWrapper.add(configPanel, BorderLayout.CENTER);
         panelGeneral.add(topWrapper, BorderLayout.NORTH);
 
-        // ===================================================================
-        // CONSOLA — área central de logs
-        // ===================================================================
         consola = new JTextArea();
         consola.setEditable(false);
         consola.setFont(FONT_CONSOLE);
@@ -341,7 +318,6 @@ public class VentanaPrincipal extends JFrame {
         scroll.setBackground(BG_CONSOLE);
         scroll.getViewport().setBackground(BG_CONSOLE);
 
-        // Header de la consola con pastilla de color
         JPanel consolaHeaderRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         consolaHeaderRow.setBackground(BG_MAIN);
         consolaHeaderRow.setBorder(new EmptyBorder(0, 0, 4, 0));
@@ -350,7 +326,6 @@ public class VentanaPrincipal extends JFrame {
         consolaLabel.setFont(FONT_SECTION);
         consolaLabel.setForeground(TEXT_MID);
 
-        // Pastilla decorativa del color Teal
         JPanel pill = new JPanel() {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
@@ -373,10 +348,8 @@ public class VentanaPrincipal extends JFrame {
         consolaWrapper.add(consolaHeaderRow, BorderLayout.NORTH);
         consolaWrapper.add(scroll, BorderLayout.CENTER);
         panelGeneral.add(consolaWrapper, BorderLayout.CENTER);
-
-        // ===================================================================
-        // STATUS BAR — barra inferior
-        // ===================================================================
+        
+        
         JPanel statusBar = new JPanel(new BorderLayout());
         statusBar.setBackground(BG_PANEL);
         statusBar.setBorder(BorderFactory.createCompoundBorder(
@@ -410,9 +383,7 @@ public class VentanaPrincipal extends JFrame {
         statusBar.add(rightStatus, BorderLayout.EAST);
         panelGeneral.add(statusBar, BorderLayout.SOUTH);
 
-        // ===================================================================
-        // LOGICA — sin cambios
-        // ===================================================================
+        
         medidor = new MedidorEnergia(this::log);
         contarEjecucionesExistentes();
         seedActual = numeroEjecuciones + 1;
@@ -439,7 +410,6 @@ public class VentanaPrincipal extends JFrame {
             int descansoSegundos = (Integer) spinnerDescanso.getValue();
             String problema      = (String)  comboProblema.getSelectedItem();
 
-            // Validar UserProblem antes de lanzar
             if ("UserProblem".equals(problema) && !validarUserProblem()) {
                 btnMedir.setEnabled(true);
                 btnReset.setEnabled(true);
@@ -541,17 +511,17 @@ public class VentanaPrincipal extends JFrame {
 
         // Acción botón Limpiar datos
         btnReset.addActionListener(e -> {
-            int confirmacion = JOptionPane.showConfirmDialog(
-                this,
-                "Are you sure you want to delete all data?\n" +
-                "This will delete:\n" +
-                "  - codecarbon_final.csv\n" +
-                "  - carpeta intel_logs\n\n" +
-                "This action cannot be undone.",
-                "Confirmar limpieza de datos",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-            );
+        	int confirmacion = JOptionPane.showConfirmDialog(
+        		    this,
+        		    "¿Seguro que quieres eliminar todos los datos?\n" +
+        		    "Esto eliminará:\n" +
+        		    "  - codecarbon_final.csv\n" +
+        		    "  - carpetas intel_logs y monitor_logs\n\n" +
+        		    "Esta acción no se puede deshacer.",
+        		    "Confirmar limpieza de datos",
+        		    JOptionPane.YES_NO_OPTION,
+        		    JOptionPane.WARNING_MESSAGE
+        		);
             if (confirmacion == JOptionPane.YES_OPTION) {
                 limpiarDatos();
                 numeroEjecuciones = 0;
@@ -566,14 +536,7 @@ public class VentanaPrincipal extends JFrame {
         });
     }
 
-    // -----------------------------------------------------------------------
-    // Helpers de construcción de componentes — nueva paleta
-    // -----------------------------------------------------------------------
 
-    /**
-     * Botón sólido con esquinas completamente redondeadas (pill shape).
-     * Fondo de color pleno, texto blanco bien visible.
-     */
     private JButton crearBotonSolido(String texto, Color fondo, Color textoColor) {
         Color hover = fondo.darker();
         JButton btn = new JButton(texto) {
@@ -607,7 +570,6 @@ public class VentanaPrincipal extends JFrame {
         return btn;
     }
 
-    /** Panel de sección con etiqueta y borde lateral de color */
     private JPanel crearPanelSeccion(String tituloSeccion, Color accentColor) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 6));
         panel.setBackground(BG_PANEL);
@@ -627,7 +589,6 @@ public class VentanaPrincipal extends JFrame {
         return panel;
     }
 
-    /** Label estilizado */
     private JLabel crearLabel(String texto) {
         JLabel lbl = new JLabel(texto);
         lbl.setFont(FONT_LABEL);
@@ -635,7 +596,6 @@ public class VentanaPrincipal extends JFrame {
         return lbl;
     }
 
-    /** Spinner estilizado */
     private JSpinner crearSpinner(int val, int min, int max, int step, int width) {
         JSpinner sp = new JSpinner(new SpinnerNumberModel(val, min, max, step));
         sp.setPreferredSize(new Dimension(width, 28));
@@ -657,7 +617,6 @@ public class VentanaPrincipal extends JFrame {
         return sp;
     }
 
-    /** Checkbox estilizado */
     private JCheckBox crearCheckbox(String texto) {
         JCheckBox chk = new JCheckBox(texto);
         chk.setFont(FONT_LABEL);
@@ -668,7 +627,6 @@ public class VentanaPrincipal extends JFrame {
         return chk;
     }
 
-    /** Combo estilizado */
     private void estilizarCombo(JComboBox<String> combo) {
         combo.setFont(FONT_LABEL);
         combo.setBackground(BG_INPUT);
@@ -689,19 +647,14 @@ public class VentanaPrincipal extends JFrame {
         });
     }
 
-    /** Separador visual horizontal */
     private Component separador() {
         return Box.createHorizontalStrut(8);
     }
 
-    /** Diálogo de información */
     private void mostrarDialogo(String titulo, String mensaje, int tipo) {
         JOptionPane.showMessageDialog(this, mensaje, titulo, tipo);
     }
 
-    // -----------------------------------------------------------------------
-    // Lógica — sin cambios respecto a la versión anterior
-    // -----------------------------------------------------------------------
 
     private void contarEjecucionesExistentes() {
         File csvFile = new File("codecarbon_final.csv");
@@ -760,12 +713,7 @@ public class VentanaPrincipal extends JFrame {
         });
     }
 
-    /**
-     * Valida los campos de UserProblem antes de lanzar la medicion.
-     * Comprueba que la clase existe en el classpath y que el fichero de datos existe.
-     * Marca los campos en rojo si hay error.
-     * @return true si todo es correcto, false si hay algun error
-     */
+
     private boolean validarUserProblem() {
         boolean ok = true;
 
@@ -798,7 +746,6 @@ public class VentanaPrincipal extends JFrame {
             ok = false;
         }
 
-        // Validar fichero de datos (solo si se ha indicado uno)
         if (!ficheroDatos.isEmpty()) {
             java.io.File f = new java.io.File("data" + java.io.File.separator + ficheroDatos);
             if (!f.exists()) {

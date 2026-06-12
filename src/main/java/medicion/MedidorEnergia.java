@@ -183,7 +183,7 @@ public class MedidorEnergia {
 
             FiltradorCSV filtrador = new FiltradorCSV();
 
-            // En Windows fusionamos con el log de Intel; en Linux solo procesamos CodeCarbon
+            // En Windows fusionamos con el log de Intel y en Linux solo procesamos CodeCarbon
             if (esWindows && fPowerGadget.exists()) {
                 filtrador.filtrarConTemperatura(csvPath, fPowerGadget.getName(), csvFinal, numRuns, problema, descansoAntes);
                 eliminarArchivoTemporal(fPowerGadget.getName());
@@ -193,7 +193,6 @@ public class MedidorEnergia {
 
             log("Análisis completado: " + csvFinal);
 
-            // Limpieza de temporales
             eliminarArchivoTemporal(csvPath);
 
         } catch (Exception e) {
